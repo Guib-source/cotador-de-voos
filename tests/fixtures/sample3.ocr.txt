@@ -1,0 +1,9 @@
+﻿Cia Voo Saida Chegada Origem Destino
+LATAM 2407 27 Fev 05:20h 27 Fev 07:OOh VVI SANTA CRUZ DE LA SIERRA LIM Lima
+- -
+LATAM 8099 27 Fev 13:05h 27 Fev 19:55h LIM - Lma GRIJ — Guarulhos
+LATAM 3206 27 Fev 2220h 28 Fev OO:05h GRIJ — Guarulhos IGU - Foz do Iguagu
+LATAM 3201 02 Mar IO:OOh 02 Mar 11:40h IGU - Foz do Iguagu GRIJ — Guarulhos
+LATAM 2429 02 Mar 16:30h 02 Mar 19:30h GRIJ — Guarulhos LIM - Lima
+2406 03 Mar 01:OOh 03 Mar 04:35h LIM - Lma VVI - SANTA CRUZ DE LA SIERRA
+LATAM

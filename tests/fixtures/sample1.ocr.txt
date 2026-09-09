@@ -1,0 +1,6 @@
+﻿Trecho
+Cia Voo Saida Chogada Origem Dostino Dur. Con. Esc. Equip. Dur.
+LATAM 3295 10 Set 05:15h 10 Set 08:45h SLZ CRU 321 03:30
+LATAM 3356 10 set 09:50h 10 set 11:05h GRU FIN 01:05 320 01:15
+LATAM 3357 14 Set 11:50h 14 Set 13:15h FIN CRU 321 01:25
+LATAM 3612 14 set 14:30h 14 set 17:55h GRU SLZ 01:15 321 03:25

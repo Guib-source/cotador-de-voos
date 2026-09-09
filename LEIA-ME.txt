@@ -1,0 +1,76 @@
+﻿COTADOR DE VOOS — VERSÃO 3.6
+
+MELHORIAS 3.6 — 09/09/2026
+Ícone próprio de avião na janela e no executável. Botões com cantos
+limpos, contornos suaves e estados de interação. Campos e tabela com
+acabamento atualizado. 1.207 testes de cotação e 35 de renderização.
+
+MELHORIAS 3.5 — 09/09/2026
+Catálogo de 552 aeroportos e correções de códigos IATA no OCR.
+Correção LOB para LDB na tabela sem cidades, conferida com o print real.
+1.207 verificações aprovadas. Histórico em VERSOES.md.
+
+MELHORIA 3.4 — COMPANHIAS AÉREAS
+Corrige COL, C0L, G0L, GOI e GO1 para GOL na coluna da companhia.
+Reconhece AZUL com confusões como AZUI, AZU1 e A2UL; LATAM com espaços
+ou confusões como LATA M, IATAM e 1ATAM. Ignora maiúsculas/minúsculas.
+Não procura nomes de companhias nas colunas de aeroportos ou cidades.
+Se o logotipo não produzir texto no OCR, o campo ainda precisa ser preenchido.
+Foram aprovadas 44 verificações, incluindo as cotações anteriores.
+RECURSOS ACUMULADOS
+
+CATÁLOGO AMPLIADO — 09/09/2026
+552 códigos IATA: 345 aeroportos brasileiros e 207 internacionais.
+Cobertura nacional conforme a base OurAirports: aeroportos com IATA,
+excluindo helipontos e locais marcados como fechados. Inclui regionais
+e aeroportos sem voos regulares. A cotação exibe Cidade (IATA).
+Catálogo disponível offline. Critérios e fonte em MANUTENCAO.md.
+Suíte atual: 1.207 verificações automáticas.
+
+CORREÇÃO DE CÓDIGOS NO OCR
+Corrige confusões como LOB - Londrina para LDB quando a cidade confirma
+um único aeroporto. Também trata letras confundidas com números, como
+LD8 - Londrina e D0H - Doha. Sem confirmação ou em caso de ambiguidade,
+mantenha a revisão manual. Na tabela sem nomes de cidade, foi acrescentada
+a exceção LOB para LDB, conferida com o print real de Londrina enviado.
+O teste desse print cobre ida e volta com conexão em Campinas.
+
+COMO ABRIR
+Extraia todo o ZIP e abra Cotador.exe. Mantenha Ocr.ps1 na mesma pasta.
+Requer Windows 10/11, .NET Framework 4.x e um idioma de OCR instalado.
+O reconhecimento acontece localmente, sem chave de API.
+
+COMO USAR
+1. Selecione o ano da ida e importe ou cole o print.
+2. Confira os trajetos, datas, horários, companhia e conexões.
+3. Informe o valor total e a quantidade de passageiros.
+4. Marque a caixa se inclui bagagem despachada. Desmarcada significa
+   somente bagagem de mão; marcada inclui mão e despachada.
+5. Confirme a revisão e clique em Gerar e copiar cotação. Cole com Ctrl+V.
+
+Duplo clique na imagem abre uma visualização ampliada.
+Ver texto reconhecido alterna entre imagem e leitura do OCR.
+Nova cotação limpa os campos. Em janelas menores, role a coluna esquerda.
+Para somente ida, deixe toda a linha VOLTA vazia.
+Datas: dd/MM/aaaa. Horários: HH:mm. Valor: por exemplo 2.450,00.
+
+REVISÃO DO CÓDIGO 3.3
+Código separado em arquivos de interface, OCR, interpretação de voos,
+agrupamento de conexões, validação e formatação da mensagem.
+Incluídos comentários em português, build reproduzível e testes portáteis.
+MANUTENCAO.md explica cada arquivo, as regras e os limites conhecidos.
+Build.ps1 compila todos os arquivos .cs da raiz; o antigo Cotador.cs foi
+substituído pelos módulos descritos na documentação.
+
+VALIDAÇÃO
+44 verificações automáticas aprovadas, incluindo comparação exata de
+11 cotações com a versão 3.2. Também testadas as importações reais dos
+prints da sessão, o clipboard e as opções de bagagem.
+
+LIMITES
+O OCR pode errar e a revisão manual continua necessária. O logotipo Azul
+pode não ser reconhecido: preencha a companhia quando o campo ficar vazio.
+O ano é sugerido pelo seletor. Os horários locais impressos são mantidos.
+Rotas ambíguas ou descontínuas podem exigir preenchimento manual.
+Não consulta preços, não identifica paradas omitidas da tabela e não envia
+mensagens automaticamente ao cliente.

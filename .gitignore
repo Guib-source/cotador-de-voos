@@ -1,0 +1,17 @@
+# Executáveis e pacotes são distribuídos nas Releases.
+*.exe
+*.pdb
+/releases/
+/tests/visual-output/
+/tests/build/
+bin/
+obj/
+.vs/
+*.user
+*.suo
+# Configuração local e credenciais nunca entram no repositório.
+.env
+.env.*
+!.env.example
+.codex/
+.agents/
