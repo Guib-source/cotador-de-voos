@@ -1,4 +1,4 @@
-﻿# Cotador de voos — manutenção da versão 3.7
+﻿# Cotador de voos — manutenção da versão 3.8
 
 Esta versão reorganiza o código da 3.2, preservando a interface e o formato da cotação. O projeto usa C# compatível com o compilador do .NET Framework 4.x do Windows e não requer pacotes externos.
 
@@ -65,7 +65,7 @@ continuam aparecendo sem nome para permitir revisão manual.
 O catálogo fica compilado no executável: não requer internet nem arquivos de
 dados adicionais durante o uso. Ao atualizar, confira códigos e cidades na
 fonte, mantenha os nomes existentes quando corretos e execute build e testes.
-A suíte atual tem 1.220 verificações, incluindo os 552 códigos isolados e
+A suíte atual tem 1.228 verificações, incluindo os 552 códigos isolados e
 acompanhados da cidade, destinos regionais, internacionais, código desconhecido
 e integração com a mensagem final.
 
@@ -124,7 +124,7 @@ Ao adicionar um novo layout, inclua o texto reconhecido e um resultado esperado 
 
 Manter o padrão de entregas numeradas: a versão 3.5 consolida as alterações
 posteriores à entrega 3.4. A cada nova entrega, incrementar a versão (próxima:
-3.8), atualizar MainForm.Layout.cs, AssemblyInfo.cs, LEIA-ME.txt, este documento
+3.9), atualizar MainForm.Layout.cs, AssemblyInfo.cs, LEIA-ME.txt, este documento
 e VERSOES.md. Executar os testes antes das alterações e novamente após compilar.
 
 Distribuir um ZIP completo Cotador-de-Voos-Windows-vX.Y.zip na pasta releases,
@@ -146,7 +146,7 @@ Cotador.ico (16, 24, 32, 48, 64, 128 e 256 px) e Cotador.png. Build.ps1 incorpor
 ICO e PNG como recursos e define o ícone nativo do executável. O usuário não
 precisa dos arquivos assets para executar; eles são necessários para recompilar.
 
-Além de tests/Test.ps1 (1.220 verificações), executar:
+Além de tests/Test.ps1 (1.228 verificações), executar:
 
 ```powershell
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tests\Test-Visual.ps1
@@ -177,3 +177,11 @@ codex-clipboard-2a8df125-435f-4412-9536-3840a313ab9f.png enviado em 10/09/2026.
 Resultado conferido: SDU–CGH, 17/09, 06:20–07:30; GRU–SDU, 17/09, 20:50–21:50.
 O ano 2026 é o parâmetro do teste; a companhia ficou vazia no OCR embora o print
 mostre Azul. São agora 13 amostras completas e 1.220 verificações de cotação.
+
+## Correção CCH para CGH — 3.8
+
+Exceção pontual relatada pelo usuário: CCH vira CGH em tabelas com dois códigos
+e duração numérica opcional, ou acompanhado por São Paulo/Congonhas.
+Rótulos com outra cidade são preservados. Não há substituição global C/G.
+Os oito novos testes são sintéticos; nenhum novo print foi fornecido nesta correção.
+Total atual: 1.228 testes de cotação e 35 de renderização.

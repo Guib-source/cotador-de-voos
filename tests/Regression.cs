@@ -143,6 +143,15 @@ internal static class Regression
             RejectItinerary(outbound + "AZUL 6052 17 Set 20:50h 17 Set 21:50h GRU BSB", "Não interpretar troca de aeroporto como conexão de somente ida.");
             RejectItinerary("AZUL 1 17 Set 06:20h 17 Set 07:30h SDU XYZ\nAZUL 2 17 Set 20:50h 17 Set 21:50h QQQ SDU", "Não supor cidade de aeroporto desconhecido.");
             RejectItinerary(outbound + "AZUL 2 17 Set 10:00h 17 Set 11:00h GRU BSB\nAZUL 3 17 Set 20:00h 17 Set 21:00h BSB SDU", "Não relaxar continuidade em itinerários com mais de dois segmentos.");
+            Check(AirportLine("SDU CCH").To == "CGH", "Corrigir CCH no destino sem cidade.");
+            Check(AirportLine("cch SDU 01:20").From == "CGH", "Corrigir CCH na origem com duração e caixa baixa.");
+            Check(AirportLine("CCH - São Paulo SDU - Rio de Janeiro").From == "CGH", "Cidade confirma CCH para CGH.");
+            Check(AirportLine("SDU - Rio de Janeiro CCH - Congonhas").To == "CGH", "Nome Congonhas confirma CGH.");
+            Check(AirportLine("CCH - Outra cidade SDU - Rio de Janeiro").From == "CCH", "Não corrigir CCH com cidade incompatível.");
+            Check(AirportLine("CGB CGH").From == "CGB", "Não trocar C/G em outros códigos.");
+            var cchRoundTrip = Quote.Group(Quote.Parse("6407 17 Set 06:20h 17 Set 07:30h SDU CCH\n6052 17 Set 20:50h 17 Set 21:50h GRU SDU", 2026));
+            Check(cchRoundTrip.Count == 2 && cchRoundTrip[0].To == "CGH" && cchRoundTrip[1].From == "GRU", "Integrar CCH à ida e volta no mesmo dia.");
+            Check(Quote.Format(cchRoundTrip, 1, "R$ 2.450,00", Quote.Baggage(false)).Contains("São Paulo (CGH)"), "Exibir CGH corrigido na cotação.");
             Console.WriteLine("PASS: " + assertions + " verificações.");
             return 0;
         }

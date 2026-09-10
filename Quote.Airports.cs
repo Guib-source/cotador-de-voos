@@ -587,12 +587,13 @@ public static partial class Quote
         text = Regex.Replace(text,
             @"^(?<space>\s*)(?<from>[A-Z0-9]{3}|GRIJ)(?<gap>\s+)(?<to>[A-Z0-9]{3}|GRIJ)(?<tail>\s*(?:\d[\d:.\s]*)?)$",
             match => match.Groups["space"].Value +
-                (match.Groups["from"].Value.Equals("LOB", StringComparison.OrdinalIgnoreCase) ? "LDB" : match.Groups["from"].Value) +
+                NormalizeBareAirportCode(match.Groups["from"].Value) +
                 match.Groups["gap"].Value +
-                (match.Groups["to"].Value.Equals("LOB", StringComparison.OrdinalIgnoreCase) ? "LDB" : match.Groups["to"].Value) +
+                NormalizeBareAirportCode(match.Groups["to"].Value) +
                 match.Groups["tail"].Value, RegexOptions.IgnoreCase);
         // Correções contextuais: só repare o código se a cidade ao lado confirmar.
         // US isolado não deve ser interpretado como Lisboa.
+        text = Regex.Replace(text, @"\bCCH(?=\s*(?:[-–—]\s*)?(?:S[ÃA]O\s+PAULO|CONGONHAS)\b)", "CGH", RegexOptions.IgnoreCase);
         text = Regex.Replace(text, @"\b(?:US|[LI1][IS1]S)\s*[-–—]?\s+LISBOA\b", "LIS - LISBOA", RegexOptions.IgnoreCase);
         text = Regex.Replace(text, @"\b(?:UM|LIM)\s*[-–—]\s*LIMA\b", "LIM - LIMA", RegexOptions.IgnoreCase);
         text = Regex.Replace(text, @"\bLIM\s*[-–—]\s*UMA\b", "LIM - LIMA", RegexOptions.IgnoreCase);
@@ -617,6 +618,15 @@ public static partial class Quote
             }
             return string.IsNullOrEmpty(candidate) ? match.Value : candidate;
         });
+    }
+
+    // Exceções relatadas para tabelas com apenas origem/destino e duração.
+    // Não substituir C por G globalmente: isso alteraria outros IATA válidos.
+    static string NormalizeBareAirportCode(string code)
+    {
+        if (code.Equals("LOB", StringComparison.OrdinalIgnoreCase)) return "LDB";
+        if (code.Equals("CCH", StringComparison.OrdinalIgnoreCase)) return "CGH";
+        return code;
     }
 
     static string FoldAirportCity(string value)

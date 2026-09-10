@@ -1,5 +1,14 @@
 # Histórico de versões — Cotador de Voos
 
+## 3.8 — 10/09/2026
+
+- Corrige CCH → CGH na origem e no destino de tabelas sem cidades, incluindo
+  duração após os códigos, ou com rótulos São Paulo/Congonhas.
+- Mantém códigos acompanhados por cidade incompatível e não troca C/G globalmente.
+- Oito novos testes sintéticos, incluindo ida e volta no mesmo dia e cotação.
+- 1.228 verificações de cotação e 35 de renderização aprovadas.
+- Pacote: `releases/Cotador-de-Voos-Windows-v3.8.zip`.
+
 ## 3.7 — 10/09/2026
 
 - Identifica dois voos de ida e volta entre as mesmas cidades, no mesmo dia

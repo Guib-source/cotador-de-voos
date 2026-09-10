@@ -1,4 +1,8 @@
-﻿COTADOR DE VOOS — VERSÃO 3.7
+﻿COTADOR DE VOOS — VERSÃO 3.8
+
+MELHORIA 3.8 — 10/09/2026
+Corrige CCH para CGH na origem e no destino de tabelas sem cidades,
+e quando São Paulo ou Congonhas confirma o código. 1.228 testes aprovados.
 
 MELHORIAS 3.7 — 10/09/2026
 Reconhece dois voos de ida e volta no mesmo dia com troca de aeroporto,
@@ -30,7 +34,7 @@ Cobertura nacional conforme a base OurAirports: aeroportos com IATA,
 excluindo helipontos e locais marcados como fechados. Inclui regionais
 e aeroportos sem voos regulares. A cotação exibe Cidade (IATA).
 Catálogo disponível offline. Critérios e fonte em MANUTENCAO.md.
-Suíte atual: 1.220 verificações automáticas.
+Suíte atual: 1.228 verificações automáticas.
 
 CORREÇÃO DE CÓDIGOS NO OCR
 Corrige confusões como LOB - Londrina para LDB quando a cidade confirma
