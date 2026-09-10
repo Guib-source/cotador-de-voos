@@ -1,4 +1,9 @@
-﻿COTADOR DE VOOS — VERSÃO 3.6
+﻿COTADOR DE VOOS — VERSÃO 3.7
+
+MELHORIAS 3.7 — 10/09/2026
+Reconhece dois voos de ida e volta no mesmo dia com troca de aeroporto,
+como SDU-CGH / GRU-SDU. Preserva os códigos e sinaliza a troca na revisão.
+1.220 testes de cotação e 35 de renderização aprovados.
 
 MELHORIAS 3.6 — 09/09/2026
 Ícone próprio de avião na janela e no executável. Botões com cantos
@@ -25,7 +30,7 @@ Cobertura nacional conforme a base OurAirports: aeroportos com IATA,
 excluindo helipontos e locais marcados como fechados. Inclui regionais
 e aeroportos sem voos regulares. A cotação exibe Cidade (IATA).
 Catálogo disponível offline. Critérios e fonte em MANUTENCAO.md.
-Suíte atual: 1.207 verificações automáticas.
+Suíte atual: 1.220 verificações automáticas.
 
 CORREÇÃO DE CÓDIGOS NO OCR
 Corrige confusões como LOB - Londrina para LDB quando a cidade confirma

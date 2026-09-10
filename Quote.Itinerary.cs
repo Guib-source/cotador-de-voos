@@ -40,6 +40,15 @@ public static partial class Quote
         };
     }
 
+    static bool SameJourneyCity(string first, string second)
+    {
+        if (first == second) return true;
+        string firstCity, secondCity;
+        return Cities.TryGetValue(first, out firstCity) &&
+            Cities.TryGetValue(second, out secondCity) &&
+            !string.IsNullOrWhiteSpace(firstCity) && firstCity == secondCity;
+    }
+
     /// <summary>Agrupa segmentos contínuos em somente ida ou em ida e volta.</summary>
     /// <remarks>A quantidade de conexões pode ser diferente em cada sentido.</remarks>
     public static List<Flight> Group(List<Flight> segments)
@@ -48,6 +57,24 @@ public static partial class Quote
             throw new QuoteReadException("Nenhum trecho completo foi reconhecido. Preencha os campos manualmente.");
         if (segments.Any(flight => flight.From == "" || flight.To == "" || flight.From == flight.To))
             throw new QuoteReadException("Não foi possível confirmar os aeroportos de todos os trechos. Revise o print e preencha manualmente.");
+        // Duas pernas inversas entre as mesmas cidades são ida e volta, mesmo
+        // no mesmo dia e com aeroportos distintos (ex.: SDU-CGH / GRU-SDU).
+        // Preserve os IATA reais; essa equivalência NÃO autoriza conexões com
+        // troca de aeroporto dentro de um sentido nem calcula traslado terrestre.
+        if (segments.Count == 2 &&
+            SameJourneyCity(segments[0].From, segments[1].To) &&
+            SameJourneyCity(segments[0].To, segments[1].From) &&
+            !SameJourneyCity(segments[0].From, segments[0].To))
+        {
+            // Horários locais da mesma cidade de destino, não duração de voo.
+            if (GetLocalDateTime(segments[1], false) < GetLocalDateTime(segments[0], true))
+                throw new QuoteReadException("A volta sai antes da chegada da ida. Revise datas e horários.");
+            return new List<Flight>
+            {
+                CombineSegments(segments.Take(1).ToList()),
+                CombineSegments(segments.Skip(1).ToList())
+            };
+        }
         for (int i = 1; i < segments.Count; i++)
             if (segments[i - 1].To != segments[i].From)
                 throw new QuoteReadException("Os aeroportos dos trechos não formam uma sequência contínua. Revise e preencha a ida e a volta manualmente.");

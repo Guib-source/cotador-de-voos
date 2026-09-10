@@ -1,5 +1,19 @@
 # Histórico de versões — Cotador de Voos
 
+## 3.7 — 10/09/2026
+
+- Identifica dois voos de ida e volta entre as mesmas cidades, no mesmo dia
+  ou em dias diferentes, mesmo com aeroportos distintos em cada sentido.
+- Corrige o caso real SDU–CGH / GRU–SDU de 17/09: a troca CGH/GRU antes
+  fazia a validação de continuidade rejeitar a importação.
+- Preserva os IATA reais e informa a troca de aeroporto no status da revisão.
+  Não inventa conexão ou traslado terrestre nem presume tempo suficiente para ele.
+- Mantém a continuidade estrita para conexões e itinerários com mais de dois
+  segmentos; cidades desconhecidas ou incompatíveis continuam exigindo revisão.
+- 1.220 verificações de cotação e 35 de renderização; 13 amostras completas.
+- OCR real do print enviado em 10/09/2026 executado na escala 3 e conferido.
+- Pacote: `releases/Cotador-de-Voos-Windows-v3.7.zip`.
+
 ## 3.6 — 09/09/2026
 
 - Correção dos cantos pretos em botões: pintura explícita do fundo do pai

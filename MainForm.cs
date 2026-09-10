@@ -68,7 +68,11 @@ public partial class MainForm : Form
                 grid.Rows[i].SetValues(flight.From, flight.To, flight.Date, flight.ArrivalDate, flight.Departure, flight.Arrival, flight.Airline, flight.Connection);
             }
 
-            status.Text = "Conexões identificadas. Confira os trechos, a companhia, o ano e a bagagem; informe o valor.";
+            bool airportChange = flights.Count == 2 &&
+                (flights[0].To != flights[1].From || flights[0].From != flights[1].To);
+            status.Text = airportChange
+                ? "Ida e volta com troca de aeroporto. Confira os IATA, a companhia, o ano e a bagagem; informe o valor."
+                : "Trechos identificados. Confira os voos, a companhia, o ano e a bagagem; informe o valor.";
         }
         catch (Exception ex)
         {

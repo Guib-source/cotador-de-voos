@@ -22,6 +22,14 @@ internal static class Regression
         Check(rejected, message);
     }
 
+    private static void RejectItinerary(string text, string message)
+    {
+        bool rejected = false;
+        try { Quote.Group(Quote.Parse(text, 2026)); }
+        catch (QuoteReadException) { rejected = true; }
+        Check(rejected, message);
+    }
+
     public static int Main(string[] args)
     {
         try
@@ -120,6 +128,21 @@ internal static class Regression
             Quote.Cities.Add("QOQ", "Cidade de Teste");
             try { Check(AirportLine("Q0Q - Cidade de Teste GRU - São Paulo").From == "Q0Q", "Ambiguidade deve exigir revisão."); }
             finally { Quote.Cities.Remove("QDQ"); Quote.Cities.Remove("QOQ"); }
+            string outbound = "AZUL 6407 17 Set 06:20h 17 Set 07:30h SDU CGH\n";
+            var sameDay = Quote.Group(Quote.Parse(outbound + "AZUL 6052 17 Set 20:50h 17 Set 21:50h GRU SDU", 2026));
+            Check(sameDay.Count == 2 && sameDay[0].Date == sameDay[1].Date, "Ida e volta no mesmo dia com troca de aeroporto.");
+            Check(sameDay[0].To == "CGH" && sameDay[1].From == "GRU", "Preservar aeroportos distintos em São Paulo.");
+            Check(sameDay.All(f => f.Connection == "Voo direto"), "Não inventar conexão nem traslado entre CGH e GRU.");
+            Check(Quote.Group(Quote.Parse(outbound + "AZUL 6052 17 Set 08:00h 17 Set 09:00h CGH SDU", 2026)).Count == 2, "Mesmo aeroporto: ida e volta não exigem estadia mínima.");
+            Check(Quote.Group(Quote.Parse(outbound + "AZUL 6052 17 Set 20:50h 17 Set 21:50h GRU GIG", 2026))[1].To == "GIG", "Permitir aeroporto alternativo também na cidade de origem.");
+            Check(Quote.Group(Quote.Parse(outbound + "AZUL 6052 18 Set 20:50h 18 Set 21:50h GRU SDU", 2026)).Count == 2, "Troca de aeroporto também em datas diferentes.");
+            var oneWay = Quote.Group(Quote.Parse(outbound + "AZUL 6052 17 Set 08:50h 17 Set 10:50h CGH BSB", 2026));
+            Check(oneWay.Count == 1 && oneWay[0].To == "BSB" && oneWay[0].Connection.Contains("1 conexão"), "Preservar somente ida com conexão no mesmo dia.");
+            RejectItinerary(outbound + "AZUL 6052 17 Set 07:00h 17 Set 08:00h GRU SDU", "Rejeitar volta anterior à chegada da ida.");
+            RejectItinerary(outbound + "AZUL 6052 17 Set 20:50h 17 Set 21:50h BSB SDU", "Não unir destinos de cidades diferentes.");
+            RejectItinerary(outbound + "AZUL 6052 17 Set 20:50h 17 Set 21:50h GRU BSB", "Não interpretar troca de aeroporto como conexão de somente ida.");
+            RejectItinerary("AZUL 1 17 Set 06:20h 17 Set 07:30h SDU XYZ\nAZUL 2 17 Set 20:50h 17 Set 21:50h QQQ SDU", "Não supor cidade de aeroporto desconhecido.");
+            RejectItinerary(outbound + "AZUL 2 17 Set 10:00h 17 Set 11:00h GRU BSB\nAZUL 3 17 Set 20:00h 17 Set 21:00h BSB SDU", "Não relaxar continuidade em itinerários com mais de dois segmentos.");
             Console.WriteLine("PASS: " + assertions + " verificações.");
             return 0;
         }
