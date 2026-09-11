@@ -11,7 +11,7 @@ public partial class MainForm : Form
 {
     DataGridView grid = new DataGridView();
     PictureBox preview = new PrintPreview();
-    TextBox output = new TextBox(), raw = new TextBox(), price = new TextBox();
+    TextBox output = new TextBox(), raw = new TextBox(), price = new MoneyTextBox();
     CheckBox baggage = new CheckBox();
     NumericUpDown passengers = new NumericUpDown(), year = new NumericUpDown();
     CheckBox reviewed = new CheckBox();

@@ -68,7 +68,7 @@ public partial class MainForm : Form
 
     public MainForm()
     {
-        Text = "Cotador de voos 3.8";
+        Text = "Cotador de voos 3.9";
         using (var iconStream = typeof(MainForm).Assembly.GetManifestResourceStream("Cotador.ico"))
             if (iconStream != null)
                 using (var loadedIcon = new Icon(iconStream)) Icon = (Icon)loadedIcon.Clone();
@@ -139,7 +139,7 @@ public partial class MainForm : Form
         identity.Controls.Add(brandIcon);
         var brand = CreateVerticalLayout(20, 38, 24);
         identity.Controls.Add(brand);
-        brand.Controls.Add(CreateLabel("C O T A D O R   /   V O O S    ·    3.8", 9, Theme.Accent, true));
+        brand.Controls.Add(CreateLabel("C O T A D O R   /   V O O S    ·    3.9", 9, Theme.Accent, true));
         brand.Controls.Add(CreateLabel("Sua próxima cotação começa aqui.", 22, Theme.Ink, true));
         brand.Controls.Add(CreateLabel("Transforme um print em uma mensagem pronta para o seu cliente.", 10, Theme.Muted));
         var reset = new ModernButton
@@ -408,7 +408,9 @@ public partial class MainForm : Form
         passengers.Minimum = 1;
         passengers.Maximum = 99;
         passengers.Value = 1;
-        details.Controls.Add(CreateLabeledField(price, "Valor total · R$"));
+        price.TextAlign = HorizontalAlignment.Right;
+        price.AccessibleDescription = "Digite somente números, incluindo os centavos. Exemplo: 245000 para 2.450,00.";
+        details.Controls.Add(CreateLabeledField(price, "Valor · R$ (centavos)"));
         details.Controls.Add(CreateLabeledField(passengers, "Passageiros"));
         var bagPanel = CreateVerticalLayout(24, 28, 0);
         bagPanel.Margin = new Padding(8, 0, 0, 0);

@@ -1,5 +1,16 @@
 # Histórico de versões — Cotador de Voos
 
+## 3.9 — 11/09/2026
+
+- Campo de valor com máscara monetária brasileira durante a digitação.
+  Digite os centavos: 1 → 0,01; 100 → 1,00; 245000 → 2.450,00.
+- Aceita colagem de valores brasileiros como R$ 2.450,00; mantém seleção,
+  exclusão de dígitos e limpeza na nova cotação. Letras e valores negativos
+  são rejeitados; entradas acima de 15 dígitos significativos não são truncadas.
+- Alterar o valor continua invalidando a revisão e a cotação anterior.
+- 1.228 verificações de cotação e 50 verificações de interface (15 novas para valor).
+- Pacote: `releases/Cotador-de-Voos-Windows-v3.9.zip`.
+
 ## 3.8 — 10/09/2026
 
 - Corrige CCH → CGH na origem e no destino de tabelas sem cidades, incluindo

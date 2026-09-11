@@ -5,7 +5,7 @@ permite revisar o itinerário e gera uma cotação para copiar ao atendimento.
 
 ![Ícone do Cotador](assets/Cotador.png)
 
-**Versão atual: 3.8.** [Histórico de versões](VERSOES.md).
+**Versão atual: 3.9.** [Histórico de versões](VERSOES.md).
 
 ## Usar o programa
 
@@ -34,7 +34,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tests\Test-Visual.ps1
 ```
 
 Não há pacotes externos. O build usa o compilador do .NET Framework instalado
-no Windows. A versão 3.8 passou em 1.228 verificações de cotação e 35 de
+no Windows. A versão 3.9 passou em 1.228 verificações de cotação e 50 de
 renderização. As imagens de QA ficam em `tests/visual-output` e não são versionadas.
 
 ## Organização

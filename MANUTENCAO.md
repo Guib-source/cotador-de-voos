@@ -1,4 +1,4 @@
-﻿# Cotador de voos — manutenção da versão 3.8
+﻿# Cotador de voos — manutenção da versão 3.9
 
 Esta versão reorganiza o código da 3.2, preservando a interface e o formato da cotação. O projeto usa C# compatível com o compilador do .NET Framework 4.x do Windows e não requer pacotes externos.
 
@@ -124,7 +124,7 @@ Ao adicionar um novo layout, inclua o texto reconhecido e um resultado esperado 
 
 Manter o padrão de entregas numeradas: a versão 3.5 consolida as alterações
 posteriores à entrega 3.4. A cada nova entrega, incrementar a versão (próxima:
-3.9), atualizar MainForm.Layout.cs, AssemblyInfo.cs, LEIA-ME.txt, este documento
+3.10), atualizar MainForm.Layout.cs, AssemblyInfo.cs, LEIA-ME.txt, este documento
 e VERSOES.md. Executar os testes antes das alterações e novamente após compilar.
 
 Distribuir um ZIP completo Cotador-de-Voos-Windows-vX.Y.zip na pasta releases,
@@ -185,3 +185,14 @@ e duração numérica opcional, ou acompanhado por São Paulo/Congonhas.
 Rótulos com outra cidade são preservados. Não há substituição global C/G.
 Os oito novos testes são sintéticos; nenhum novo print foi fornecido nesta correção.
 Total atual: 1.228 testes de cotação e 35 de renderização.
+
+
+## Entrada monetária — 3.9
+MoneyTextBox.cs formata a entrada em centavos: 245000 vira 2.450,00.
+Mantém o cursor por quantidade de dígitos à direita e trata Backspace/Delete
+para não ficar preso nos separadores. O TextChanged externo só é emitido
+quando o valor formatado muda, preservando a invalidação da revisão.
+Colagens negativas, letras e mais de 15 dígitos significativos são rejeitadas
+sem truncar o valor. Limpar todos os caracteres mantém o campo vazio.
+Test-Visual.ps1 inclui 15 verificações de entrada monetária: 50 no total.
+A suíte de cotações mantém 1.228 verificações.

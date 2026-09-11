@@ -1,4 +1,9 @@
-﻿COTADOR DE VOOS — VERSÃO 3.8
+﻿COTADOR DE VOOS — VERSÃO 3.9
+
+MELHORIA 3.9 — 11/09/2026
+Valor formatado automaticamente: digite 245000 para 2.450,00.
+Os dois últimos números são centavos. Aceita colar R$ 2.450,00.
+1.228 testes de cotação e 50 de interface aprovados.
 
 MELHORIA 3.8 — 10/09/2026
 Corrige CCH para CGH na origem e no destino de tabelas sem cidades,
@@ -61,7 +66,7 @@ Duplo clique na imagem abre uma visualização ampliada.
 Ver texto reconhecido alterna entre imagem e leitura do OCR.
 Nova cotação limpa os campos. Em janelas menores, role a coluna esquerda.
 Para somente ida, deixe toda a linha VOLTA vazia.
-Datas: dd/MM/aaaa. Horários: HH:mm. Valor: por exemplo 2.450,00.
+Datas: dd/MM/aaaa. Horários: HH:mm. Valor: digite 245000 para 2.450,00 (inclua os centavos).
 
 REVISÃO DO CÓDIGO 3.3
 Código separado em arquivos de interface, OCR, interpretação de voos,

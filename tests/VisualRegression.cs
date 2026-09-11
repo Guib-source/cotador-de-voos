@@ -88,9 +88,41 @@ internal static class VisualRegression
                 }
                 sheet.Save(Path.Combine(args[0], "botoes.png"), ImageFormat.Png);
             }
+            using (var money = new MoneyProbe())
+            {
+                money.CreateControl();
+                foreach (string sample in new[] { "1|0,01", "12|0,12", "123|1,23", "245000|2.450,00", "000001|0,01", "R$ 2.450,00|2.450,00", "999999999999999|9.999.999.999.999,99" })
+                {
+                    var pair = sample.Split('|');
+                    money.Text = pair[0];
+                    Check(money.Text == pair[1], "Máscara de valor: " + pair[0]);
+                }
+                money.Text = "245000";
+                money.Text = "-500";
+                Check(money.Text == "2.450,00", "Não transformar valor negativo colado em positivo.");
+                money.Text = "9999999999999999";
+                Check(money.Text == "2.450,00", "Valor acima do limite não deve ser truncado.");
+                money.Clear();
+                foreach (char digit in "245000") { money.Select(money.TextLength, 0); money.SelectedText = digit.ToString(); }
+                Check(money.Text == "2.450,00", "Digitação sucessiva com máscara.");
+                money.Select(money.TextLength, 0); money.DeleteKey(Keys.Back);
+                Check(money.Text == "245,00", "Backspace remove último dígito.");
+                money.Text = "123456"; money.Select(5, 0); money.DeleteKey(Keys.Back);
+                Check(money.Text == "123,56", "Backspace pula vírgula e remove dígito à esquerda.");
+                money.Text = "123456"; money.Select(1, 0); money.DeleteKey(Keys.Delete);
+                Check(money.Text == "134,56", "Delete pula ponto e remove dígito à direita.");
+                money.SelectAll(); money.SelectedText = "5000";
+                Check(money.Text == "50,00", "Substituição da seleção inteira.");
+                money.Clear(); Check(money.Text == "", "Nova cotação pode limpar o valor.");
+            }
             Console.WriteLine("PASS visual: " + assertions + " verificações.");
             return 0;
         }
         catch (Exception error) { Console.Error.WriteLine(error); return 1; }
     }
+}
+
+internal class MoneyProbe : MoneyTextBox
+{
+    public void DeleteKey(Keys key) { OnKeyDown(new KeyEventArgs(key)); }
 }
