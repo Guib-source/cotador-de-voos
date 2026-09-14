@@ -5,7 +5,19 @@ permite revisar o itinerário e gera uma cotação para copiar ao atendimento.
 
 ![Ícone do Cotador](assets/Cotador.png)
 
-**Versão atual: 3.10.** [Histórico de versões](VERSOES.md).
+**Estável: 3.10 · Em desenvolvimento: 4.0.0-beta.1.** [Histórico de versões](VERSOES.md).
+
+## Avaliar as melhorias da 4.0
+
+As mudanças estão no branch `codex/preparacao-v4.0`. A beta inclui busca por
+cidade, IATA ou nome do aeroporto e alertas explicados nos campos da revisão.
+Selecione Origem ou Destino e clique em **Buscar aeroporto**, ou pressione F3.
+Campos amarelos indicam dados para conferir; selecione o campo para ver o motivo.
+
+Compile com `Build.ps1` e abra `bin/4.0.0-beta.1/Cotador.exe`.
+O executável estável da raiz é preservado. Para preparar um ZIP local,
+execute `Package.ps1`. A release 4.0 será publicada posteriormente.
+[Fluxo de versionamento](VERSIONAMENTO.md) · [Mudanças previstas](RELEASE-NOTES.md).
 
 ## Usar o programa
 
@@ -39,8 +51,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tests\Test-Visual.ps1
 ```
 
 Não há pacotes externos. O build usa o compilador do .NET Framework instalado
-no Windows. A versão 3.10 passou em 1.241 verificações de cotação e 62 de
-renderização. As imagens de QA ficam em `tests/visual-output` e não são versionadas.
+no Windows. Os testes usam a compilação em `bin/<versão>/`. As imagens de QA ficam em `tests/visual-output` e não são versionadas.
 
 ## Organização
 
@@ -56,5 +67,5 @@ O catálogo usa dados de domínio público do [OurAirports](https://ourairports.
 ## Entregas
 
 O código-fonte é mantido no Git. Executáveis e ZIPs ficam em **Releases**, com
-tags como `v3.6`. A pasta local `releases` é ignorada pelo Git. Pacotes históricos
+tags como `v4.0.0`. A pasta local `releases` é ignorada pelo Git. Pacotes históricos
 citados na documentação podem existir apenas na pasta de trabalho original.

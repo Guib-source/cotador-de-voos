@@ -68,7 +68,7 @@ public partial class MainForm : Form
 
     public MainForm()
     {
-        Text = "Cotador de voos 3.10";
+        Text = "Cotador de voos " + VersionInfo.Display;
         using (var iconStream = typeof(MainForm).Assembly.GetManifestResourceStream("Cotador.ico"))
             if (iconStream != null)
                 using (var loadedIcon = new Icon(iconStream)) Icon = (Icon)loadedIcon.Clone();
@@ -100,7 +100,7 @@ public partial class MainForm : Form
             Margin = new Padding(0, 0, 18, 0)
         };
         columns.Controls.Add(leftHost);
-        var left = CreateVerticalLayout(250, 0, 158);
+        var left = CreateVerticalLayout(220, 0, 158);
         left.Dock = DockStyle.Top;
         left.Height = 740;
         leftHost.Controls.Add(left);
@@ -139,7 +139,7 @@ public partial class MainForm : Form
         identity.Controls.Add(brandIcon);
         var brand = CreateVerticalLayout(20, 38, 24);
         identity.Controls.Add(brand);
-        brand.Controls.Add(CreateLabel("C O T A D O R   /   V O O S    ·    3.10", 9, Theme.Accent, true));
+        brand.Controls.Add(CreateLabel("C O T A D O R   /   V O O S    ·    " + VersionInfo.Display, 9, Theme.Accent, true));
         brand.Controls.Add(CreateLabel("Sua próxima cotação começa aqui.", 22, Theme.Ink, true));
         brand.Controls.Add(CreateLabel("Transforme um print em uma mensagem pronta para o seu cliente.", 10, Theme.Muted));
         var reset = new ModernButton
@@ -262,7 +262,7 @@ public partial class MainForm : Form
             Margin = new Padding(0, 0, 0, 14)
         };
         left.Controls.Add(flightCard);
-        var flightLayout = CreateVerticalLayout(29, 36, 24, 0, 24, 45);
+        var flightLayout = CreateVerticalLayout(29, 36, 24, 0, 26, 24, 45);
         flightCard.Controls.Add(flightLayout);
         flightLayout.Controls.Add(CreateLabel("02   Revise seu itinerário", 12, Theme.Ink, true));
                 var actions = new FlowLayoutPanel { Dock = DockStyle.Fill, Margin = new Padding(0), WrapContents = false };
@@ -272,6 +272,7 @@ public partial class MainForm : Form
         addSegment.Text = "+ Trecho"; removeSegment.Text = "− Remover";
         addSegment.Size = removeSegment.Size = new Size(105, 32);
         actions.Controls.Add(multipleMode); actions.Controls.Add(addSegment); actions.Controls.Add(removeSegment);
+        actions.Controls.Add(findAirport);
         flightLayout.Controls.Add(actions);
         flightLayout.Controls.Add(CreateLabel("Datas: dd/mm/aa · Horas: hh:mm. Somente ida: deixe a volta vazia.", 9, Theme.Muted));
         grid.Dock = DockStyle.Fill;
@@ -344,6 +345,7 @@ public partial class MainForm : Form
         grid.Rows[0].HeaderCell.Value = "IDA";
         grid.Rows[1].HeaderCell.Value = "VOLTA";
         flightLayout.Controls.Add(grid);
+        flightLayout.Controls.Add(reviewHint);
         connectionTitle = CreateLabel("CONEXÕES / selecione um trecho", 8, Theme.Muted, true);
         flightLayout.Controls.Add(connectionTitle);
         connectionEditor.Multiline = true;
@@ -354,6 +356,7 @@ public partial class MainForm : Form
         connectionEditor.Font = new Font("Segoe UI", 9);
         flightLayout.Controls.Add(connectionEditor);
         ConfigureItinerary();
+        ConfigureReview();
     }
     private void BuildDetailsCard(TableLayoutPanel left)
     {

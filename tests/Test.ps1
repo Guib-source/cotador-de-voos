@@ -1,6 +1,11 @@
 ﻿# Testes independentes dos prints originais e de pacotes externos.
+param([string]$AppDirectory)
 $ErrorActionPreference = 'Stop'
-$appDirectory = Split-Path -Parent $PSScriptRoot
+if (!$AppDirectory) {
+    $root = Split-Path -Parent $PSScriptRoot
+    $version = [regex]::Match([IO.File]::ReadAllText((Join-Path $root 'VersionInfo.cs')), 'Display = "([^"]+)"').Groups[1].Value
+    $AppDirectory = Join-Path $root ('bin/' + $version)
+}
 $compiler = Join-Path $env:WINDIR 'Microsoft.NET\Framework64\v4.0.30319\csc.exe'
 if (!(Test-Path -LiteralPath $compiler)) { $compiler = Join-Path $env:WINDIR 'Microsoft.NET\Framework\v4.0.30319\csc.exe' }
 $testDirectory = Join-Path ([IO.Path]::GetTempPath()) ('cotador-tests-' + [Guid]::NewGuid())

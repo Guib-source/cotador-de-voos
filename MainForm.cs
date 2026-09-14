@@ -38,8 +38,11 @@ public partial class MainForm : Form
             }
 
             foreach (DataGridViewRow r in grid.Rows)
+            {
+                r.Tag = null;
                 foreach (DataGridViewCell c in r.Cells)
                     c.Value = "";
+            }
             status.Text = "Lendo o print no seu computador…";
             int selectedYear = (int)year.Value;
             raw.Text = await ReadPrint(path, 3);
@@ -138,6 +141,7 @@ public partial class MainForm : Form
         }
 
         if (disposing && entryMask != null) entryMask.Dispose();
+        if (disposing) reviewTips.Dispose();
         base.Dispose(disposing);
     }
 }

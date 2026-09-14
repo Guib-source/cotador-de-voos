@@ -1,6 +1,11 @@
 # Renderiza a interface sem abrir janelas. Saída de QA não entra no pacote.
+param([string]$AppDirectory)
 $ErrorActionPreference = 'Stop'
-$appDirectory = Split-Path -Parent $PSScriptRoot
+if (!$AppDirectory) {
+    $root = Split-Path -Parent $PSScriptRoot
+    $version = [regex]::Match([IO.File]::ReadAllText((Join-Path $root 'VersionInfo.cs')), 'Display = "([^"]+)"').Groups[1].Value
+    $AppDirectory = Join-Path $root ('bin/' + $version)
+}
 $outputDirectory = Join-Path $PSScriptRoot 'visual-output'
 New-Item -ItemType Directory -Path $outputDirectory -Force | Out-Null
 $compiler = Join-Path $env:WINDIR 'Microsoft.NET\Framework64\v4.0.30319\csc.exe'

@@ -1,5 +1,14 @@
 # Histórico de versões — Cotador de Voos
 
+## 4.0.0-beta.1 — em desenvolvimento
+
+- Busca de aeroportos por cidade, IATA e nome, aceitando termos sem acentos.
+- Seleção de origem e destino com botão de busca e atalho F3.
+- Alertas visíveis para dados incompletos e inconsistentes na revisão.
+- Explicação das correções de IATA feitas pelo OCR, incluindo conexões.
+- Versão centralizada e compilações de avaliação em pastas separadas.
+- Preparação de pacotes locais sem sobrescrever entregas anteriores.
+
 ## 3.10 — 14/09/2026
 
 - Modo de múltiplos trechos, com seleção automática para rotas abertas e

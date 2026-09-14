@@ -1,4 +1,4 @@
-# Cotador de voos — manutenção da versão 3.10
+# Cotador de voos — manutenção da versão 4.0.0-beta.1
 
 Esta versão reorganiza o código da 3.2, preservando a interface e o formato da cotação. O projeto usa C# compatível com o compilador do .NET Framework 4.x do Windows e não requer pacotes externos.
 
@@ -122,11 +122,14 @@ Ao adicionar um novo layout, inclua o texto reconhecido e um resultado esperado 
 
 ## Versionamento das entregas
 
-Manter o padrão de entregas numeradas: a versão 3.5 consolida as alterações
-posteriores à entrega 3.4. A cada nova entrega, incrementar a versão (próxima:
-3.11), atualizar MainForm.Layout.cs, AssemblyInfo.cs, LEIA-ME.txt, este documento
-e VERSOES.md. Executar os testes antes das alterações e novamente após compilar.
-
+A próxima versão estável planejada é 4.0.0. Trabalhar no branch
+codex/preparacao-v4.0 e manter main na entrega estável durante a avaliação.
+VersionInfo.cs centraliza a identidade da versão. Build.ps1 grava em
+bin/<versão>/; os testes usam essa mesma pasta. Package.ps1 prepara apenas
+um ZIP local após build e testes, recusando sobrescrever entregas.
+Consultar VERSIONAMENTO.md antes de preparar novas betas ou a release.
+As novas descrições de versão incluem somente mudanças, sem contagem de
+verificações. RELEASE-NOTES.md contém o texto da futura entrega.
 Distribuir um ZIP completo Cotador-de-Voos-Windows-vX.Y.zip na pasta releases,
 com a pasta interna Cotador contendo executável, Ocr.ps1, fontes, documentação
 e testes. Não incluir releases dentro do pacote. Preservar pacotes anteriores;
@@ -213,3 +216,27 @@ a cotação mantém dd/MM/yyyy. A máscara não substitui validação de datas/h
 O OCR real do print SLZ–BSB / BSB–FOR reconheceu LATAM e os horários corretos;
 a reprodução textual integra Regression.cs. Testes atuais: 1.241 de cotação,
 62 de interface. Imagens de conferência nos dois tamanhos em visual-output.
+## Revisão assistida e busca — preparação da 4.0
+
+Flight.Notices registra os códigos impressos que foram corrigidos. O parser
+compara os IATA selecionados antes e depois da normalização. CombineSegments
+leva os avisos dos extremos para Origem/Destino; os internos vão para Conexões.
+Os avisos não alteram a mensagem comercial e não estimam confiança do OCR.
+FlightReview avalia campos incompletos, códigos fora do catálogo, datas e
+horários inválidos. Uma linha inteiramente vazia é opcional. O aviso de uma
+correção só aparece enquanto o valor atual corresponde ao valor corrigido.
+MainForm.Review associa cores, explicações e tooltips às células. A confirmação
+geral da revisão antes de copiar continua obrigatória; avisos não substituem
+as validações que impedem a geração de dados incompletos.
+
+AirportCatalog.Search filtra cidade, IATA e nome sem acentos. A escolha é
+explícita para evitar selecionar automaticamente um aeroporto de uma cidade
+com várias opções. O código escolhido preenche apenas a célula de origem ou
+destino. Códigos fora do catálogo ainda podem ser digitados, com aviso.
+AirportCatalog.Names.cs complementa os IATA existentes com os nomes da base
+OurAirports (https://davidmegginson.github.io/ourairports-data/airports.csv),
+domínio público, consultada em 14/09/2026. Foram preservados os nomes das
+cidades e os IATA existentes. Os nomes dos aeroportos mantêm o idioma da fonte.
+SHA256 do CSV consultado:
+47880571C7F3129667CC22E5A3FD0EC10F12883B405CA2B3CE40994847610529.
+O arquivo de origem não é necessário durante o uso: o catálogo é offline.

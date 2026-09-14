@@ -1,0 +1,6 @@
+- Busca de aeroportos por cidade, código IATA ou nome, com suporte a termos sem acentos.
+- Seleção de aeroportos na revisão de origem e destino pelo botão Buscar aeroporto ou atalho F3.
+- Destaque de campos incompletos, datas e horários inválidos e códigos fora do catálogo.
+- Explicação das correções de IATA feitas pelo OCR, inclusive em aeroportos de conexão.
+- Compilações de avaliação separadas da versão estável e identificação centralizada da versão.
+- Preparação de pacotes locais sem sobrescrever entregas anteriores.

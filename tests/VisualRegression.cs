@@ -86,6 +86,38 @@ internal static class VisualRegression
                     using (var bitmap = new Bitmap(size.Width, size.Height))
                     { form.DrawToBitmap(bitmap, new Rectangle(Point.Empty, size)); bitmap.Save(Path.Combine(args[0], "multiple-" + size.Width + ".png"), ImageFormat.Png); }
                 }
+                mode.Checked = true;
+                var correctedFlights = (List<Flight>)typeof(MainForm).GetMethod("IdentifyPrint", flags).Invoke(form, new object[] { "1234 12 Nov 04:35h 12 Nov 07:05h VCP LOB", 2026 });
+                typeof(MainForm).GetMethod("PopulateFlights", flags).Invoke(form, new object[] { correctedFlights });
+                Check(table.Rows[0].Cells[1].ToolTipText.Contains("LOB corrigido para LDB"), "Explicar correção no campo da interface.");
+                Check(table.Rows[0].Cells[6].Style.BackColor == Color.FromArgb(255, 244, 204), "Destacar companhia ausente.");
+                table.CurrentCell = table.Rows[0].Cells[1];
+                var hint = (Label)typeof(MainForm).GetField("reviewHint", flags).GetValue(form);
+                Check(hint.Text.Contains("LOB"), "Explicação visível ao selecionar o campo.");
+                foreach (var size in new[] { new Size(1400, 900), new Size(1160, 800) })
+                {
+                    form.ClientSize = size; form.PerformLayout();
+                    using (var bitmap = new Bitmap(size.Width, size.Height))
+                    { form.DrawToBitmap(bitmap, new Rectangle(Point.Empty, size)); bitmap.Save(Path.Combine(args[0], "review-" + size.Width + ".png"), ImageFormat.Png); }
+                }
+                table.Rows[0].Cells[6].Value = "AZUL";
+                Check(table.Rows[0].Cells[6].ToolTipText == "" && table.Rows[0].Cells[6].Style.BackColor.IsEmpty, "Limpar alerta ao completar campo.");
+            }
+            using (var surface = new Panel { Size = new Size(800, 500) })
+            using (var picker = new AirportSearchDialog("sao luis", "Origem"))
+            {
+                picker.TopLevel = false; surface.Controls.Add(picker); picker.Visible = true; picker.CreateControl(); picker.PerformLayout();
+                var flags = BindingFlags.NonPublic | BindingFlags.Instance;
+                var list = (ListBox)typeof(AirportSearchDialog).GetField("results", flags).GetValue(picker);
+                var search = (TextBox)typeof(AirportSearchDialog).GetField("search", flags).GetValue(picker);
+                var choose = (Button)typeof(AirportSearchDialog).GetField("choose", flags).GetValue(picker);
+                Check(list.Items.Count > 0 && list.SelectedIndex == -1 && !choose.Enabled, "Busca exige seleção explícita.");
+                search.Text = "Congonhas";
+                Check(list.Items.Count > 0 && ((AirportChoice)list.Items[0]).Code == "CGH", "Busca por nome na janela.");
+                using (var bitmap = new Bitmap(picker.Width, picker.Height))
+                { picker.DrawToBitmap(bitmap, new Rectangle(Point.Empty, picker.Size)); bitmap.Save(Path.Combine(args[0], "airport-search.png"), ImageFormat.Png); }
+                list.SelectedIndex = 0; choose.PerformClick();
+                Check(picker.SelectedCode == "CGH", "Seleção retorna apenas o IATA.");
             }
             using (var text = new TextBox())
             using (var mask = new EntryMask(text, true))

@@ -94,10 +94,12 @@ public partial class MainForm
         for (int i = 0; i < flights.Count; i++)
         {
             var f = flights[i];
+            grid.Rows[i].Tag = f.Notices;
             grid.Rows[i].SetValues(f.From, f.To, f.Date, f.ArrivalDate, f.Departure, f.Arrival, f.Airline, f.Connection);
         }
         LabelRows();
         grid.CurrentCell = grid.Rows[0].Cells[0];
         UpdateConnection();
+        RefreshReview();
     }
 }

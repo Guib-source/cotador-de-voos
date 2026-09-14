@@ -53,7 +53,7 @@ public static partial class Quote
             stops.Add(Place(next.From) + " (chegada " + previous.Arrival + "h" + (previous.ArrivalDate != first.Date ? " em " + previous.ArrivalDate : "") + "; saída " + next.Departure + "h" + (next.Date != first.Date ? " em " + next.Date : "") + ")");
         }
 
-        return new Flight
+        var combined = new Flight
         {
             From = first.From,
             To = last.To,
@@ -64,6 +64,13 @@ public static partial class Quote
             Airline = string.Join(" / ", segments.Select(flight => flight.Airline).Where(s => s != "").Distinct()),
             Connection = segments.Count == 1 ? "Voo direto" : (segments.Count - 1) + (segments.Count == 2 ? " conexão em " : " conexões em ") + string.Join(" e ", stops)
         };
+        for (int i = 0; i < segments.Count; i++)
+            foreach (var notice in segments[i].Notices)
+            {
+                int column = notice.Column == 0 && i == 0 ? 0 : (notice.Column == 1 && i == segments.Count - 1 ? 1 : 7);
+                combined.Notices.Add(new FlightNotice { Column = column, Value = column == 7 ? combined.Connection : notice.Value, Message = notice.Message });
+            }
+        return combined;
     }
 
     static bool SameJourneyCity(string first, string second)
