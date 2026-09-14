@@ -1,11 +1,11 @@
-﻿# Cotador de Voos
+# Cotador de Voos
 
 Aplicativo Windows em português que lê um print de voos com OCR local,
 permite revisar o itinerário e gera uma cotação para copiar ao atendimento.
 
 ![Ícone do Cotador](assets/Cotador.png)
 
-**Versão atual: 3.9.** [Histórico de versões](VERSOES.md).
+**Versão atual: 3.10.** [Histórico de versões](VERSOES.md).
 
 ## Usar o programa
 
@@ -19,6 +19,11 @@ O reconhecimento acontece localmente, sem chave de API.
 2. Confira aeroportos, datas, horários, companhia e conexões.
 3. Informe valor, passageiros e bagagem.
 4. Confirme a revisão e gere a cotação. Cole com Ctrl+V.
+
+O modo **Múltiplos trechos** preenche cada voo do print em uma linha e é
+ativado automaticamente para rotas que não se encaixam em ida e volta.
+Também pode ser marcado antes da importação. Use **+ Trecho** e **− Remover**
+na edição manual. Digite `121126` para `12/11/26` e `0435` para `04:35`.
 
 O OCR pode errar; a revisão manual é necessária. O programa não consulta preços
 nem envia mensagens automaticamente. [Instruções completas](LEIA-ME.txt).
@@ -34,7 +39,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tests\Test-Visual.ps1
 ```
 
 Não há pacotes externos. O build usa o compilador do .NET Framework instalado
-no Windows. A versão 3.9 passou em 1.228 verificações de cotação e 50 de
+no Windows. A versão 3.10 passou em 1.241 verificações de cotação e 62 de
 renderização. As imagens de QA ficam em `tests/visual-output` e não são versionadas.
 
 ## Organização

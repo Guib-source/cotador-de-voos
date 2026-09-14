@@ -1,4 +1,15 @@
-﻿COTADOR DE VOOS — VERSÃO 3.9
+﻿COTADOR DE VOOS — VERSÃO 3.10
+
+MELHORIAS 3.10 — 14/09/2026
+Múltiplos trechos: o print preenche cada voo em uma linha quando a rota
+não se encaixa em ida e volta, como SLZ–BSB / BSB–FOR. Também pode marcar
+Múltiplos trechos antes de importar para manter todos os voos separados.
+Use + Trecho e − Remover para editar a quantidade; selecione a linha
+para revisar suas conexões. Nesse modo cada voo do print fica separado,
+inclusive conexões. A cotação numera os trechos e informa o valor total.
+Digite datas como 121126 → 12/11/26 e horários como 0435 → 04:35.
+Ano curto representa 2000–2099; a mensagem mantém o ano completo.
+1.241 verificações de cotação e 62 de interface aprovadas.
 
 MELHORIA 3.9 — 11/09/2026
 Valor formatado automaticamente: digite 245000 para 2.450,00.
@@ -39,7 +50,7 @@ Cobertura nacional conforme a base OurAirports: aeroportos com IATA,
 excluindo helipontos e locais marcados como fechados. Inclui regionais
 e aeroportos sem voos regulares. A cotação exibe Cidade (IATA).
 Catálogo disponível offline. Critérios e fonte em MANUTENCAO.md.
-Suíte atual: 1.228 verificações automáticas.
+Suíte atual: 1.241 verificações automáticas.
 
 CORREÇÃO DE CÓDIGOS NO OCR
 Corrige confusões como LOB - Londrina para LDB quando a cidade confirma

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
@@ -68,7 +68,7 @@ public partial class MainForm : Form
 
     public MainForm()
     {
-        Text = "Cotador de voos 3.9";
+        Text = "Cotador de voos 3.10";
         using (var iconStream = typeof(MainForm).Assembly.GetManifestResourceStream("Cotador.ico"))
             if (iconStream != null)
                 using (var loadedIcon = new Icon(iconStream)) Icon = (Icon)loadedIcon.Clone();
@@ -139,7 +139,7 @@ public partial class MainForm : Form
         identity.Controls.Add(brandIcon);
         var brand = CreateVerticalLayout(20, 38, 24);
         identity.Controls.Add(brand);
-        brand.Controls.Add(CreateLabel("C O T A D O R   /   V O O S    ·    3.9", 9, Theme.Accent, true));
+        brand.Controls.Add(CreateLabel("C O T A D O R   /   V O O S    ·    3.10", 9, Theme.Accent, true));
         brand.Controls.Add(CreateLabel("Sua próxima cotação começa aqui.", 22, Theme.Ink, true));
         brand.Controls.Add(CreateLabel("Transforme um print em uma mensagem pronta para o seu cliente.", 10, Theme.Muted));
         var reset = new ModernButton
@@ -262,10 +262,18 @@ public partial class MainForm : Form
             Margin = new Padding(0, 0, 0, 14)
         };
         left.Controls.Add(flightCard);
-        var flightLayout = CreateVerticalLayout(29, 26, 116, 24, 0);
+        var flightLayout = CreateVerticalLayout(29, 36, 24, 0, 24, 45);
         flightCard.Controls.Add(flightLayout);
         flightLayout.Controls.Add(CreateLabel("02   Revise seu itinerário", 12, Theme.Ink, true));
-        flightLayout.Controls.Add(CreateLabel("Edite os campos abaixo. Para somente ida, deixe a volta vazia.", 9, Theme.Muted));
+                var actions = new FlowLayoutPanel { Dock = DockStyle.Fill, Margin = new Padding(0), WrapContents = false };
+        multipleMode.Text = "Múltiplos trechos";
+        multipleMode.AutoSize = true;
+        multipleMode.Margin = new Padding(0, 8, 16, 0);
+        addSegment.Text = "+ Trecho"; removeSegment.Text = "− Remover";
+        addSegment.Size = removeSegment.Size = new Size(105, 32);
+        actions.Controls.Add(multipleMode); actions.Controls.Add(addSegment); actions.Controls.Add(removeSegment);
+        flightLayout.Controls.Add(actions);
+        flightLayout.Controls.Add(CreateLabel("Datas: dd/mm/aa · Horas: hh:mm. Somente ida: deixe a volta vazia.", 9, Theme.Muted));
         grid.Dock = DockStyle.Fill;
         grid.AllowUserToAddRows = false;
         grid.AllowUserToDeleteRows = false;
@@ -324,8 +332,8 @@ public partial class MainForm : Form
         grid.Columns[7].Visible = false;
         grid.Columns[2].HeaderText = "Dt. saída";
         grid.Columns[3].HeaderText = "Dt. chegada";
-        grid.Columns[2].ToolTipText = "Data de saída (dd/MM/aaaa)";
-        grid.Columns[3].ToolTipText = "Data de chegada (dd/MM/aaaa)";
+        grid.Columns[2].ToolTipText = "Data de saída (dd/MM/aa)";
+        grid.Columns[3].ToolTipText = "Data de chegada (dd/MM/aa)";
         grid.Columns[2].FillWeight = 125;
         grid.Columns[3].FillWeight = 125;
         grid.Columns[4].FillWeight = 80;
@@ -336,54 +344,17 @@ public partial class MainForm : Form
         grid.Rows[0].HeaderCell.Value = "IDA";
         grid.Rows[1].HeaderCell.Value = "VOLTA";
         flightLayout.Controls.Add(grid);
-        flightLayout.Controls.Add(CreateLabel("CONEXÕES   /   confira os aeroportos e horários", 8, Theme.Muted, true));
-        var connections = new TableLayoutPanel
-        {
-            Dock = DockStyle.Fill,
-            ColumnCount = 2,
-            RowCount = 1,
-            Margin = new Padding(0)
-        };
-        connections.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-        connections.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-        flightLayout.Controls.Add(connections);
-        for (int i = 0; i < 2; i++)
-        {
-            int row = i;
-            var connectionBox = CreateVerticalLayout(22, 0);
-            connectionBox.BackColor = Theme.Background;
-            connectionBox.Padding = new Padding(10, 5, 10, 7);
-            connectionBox.Margin = new Padding(i == 0 ? 0 : 5, 0, i == 0 ? 5 : 0, 0);
-            connections.Controls.Add(connectionBox);
-            connectionBox.Controls.Add(CreateLabel(i == 0 ? "IDA" : "VOLTA", 8, Theme.Accent, true));
-            var editor = new TextBox
-            {
-                Multiline = true,
-                Dock = DockStyle.Fill,
-                BorderStyle = BorderStyle.None,
-                ScrollBars = ScrollBars.Vertical,
-                BackColor = Theme.Background,
-                ForeColor = Theme.Ink,
-                Font = new Font("Segoe UI", 9)
-            };
-            connectionBox.Controls.Add(editor);
-            editor.TextChanged += (s, e) =>
-            {
-                if (Convert.ToString(grid.Rows[row].Cells[7].Value) != editor.Text)
-                    grid.Rows[row].Cells[7].Value = editor.Text;
-            };
-            grid.CellValueChanged += (s, e) =>
-            {
-                if (e.RowIndex == row && e.ColumnIndex == 7)
-                {
-                    var value = Convert.ToString(grid.Rows[row].Cells[7].Value);
-                    if (editor.Text != value)
-                        editor.Text = value;
-                }
-            };
-        }
+        connectionTitle = CreateLabel("CONEXÕES / selecione um trecho", 8, Theme.Muted, true);
+        flightLayout.Controls.Add(connectionTitle);
+        connectionEditor.Multiline = true;
+        connectionEditor.Dock = DockStyle.Fill;
+        connectionEditor.ScrollBars = ScrollBars.Vertical;
+        connectionEditor.BorderStyle = BorderStyle.FixedSingle;
+        connectionEditor.BackColor = Theme.Background;
+        connectionEditor.Font = new Font("Segoe UI", 9);
+        flightLayout.Controls.Add(connectionEditor);
+        ConfigureItinerary();
     }
-
     private void BuildDetailsCard(TableLayoutPanel left)
     {
         var detailCard = new ModernCard
@@ -533,6 +504,10 @@ public partial class MainForm : Form
             foreach (DataGridViewRow r in grid.Rows)
                 foreach (DataGridViewCell c in r.Cells)
                     c.Value = "";
+            grid.Rows.Clear();
+            grid.Rows.Add(2);
+            multipleMode.Checked = false;
+            LabelRows();
             raw.Clear();
             output.Clear();
             price.Clear();

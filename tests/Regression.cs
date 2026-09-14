@@ -152,6 +152,33 @@ internal static class Regression
             var cchRoundTrip = Quote.Group(Quote.Parse("6407 17 Set 06:20h 17 Set 07:30h SDU CCH\n6052 17 Set 20:50h 17 Set 21:50h GRU SDU", 2026));
             Check(cchRoundTrip.Count == 2 && cchRoundTrip[0].To == "CGH" && cchRoundTrip[1].From == "GRU", "Integrar CCH à ida e volta no mesmo dia.");
             Check(Quote.Format(cchRoundTrip, 1, "R$ 2.450,00", Quote.Baggage(false)).Contains("São Paulo (CGH)"), "Exibir CGH corrigido na cotação.");
+            bool multi;
+            string openJaw = "LATAM 3313 12 Nov 04:35h 12 Nov 07:05h SLZ BSB\nLATAM 3024 16 Nov 07:00h 16 Nov 09:35h BSB FOR";
+            var many = Quote.Identify(Quote.Parse(openJaw, 2026), false, out multi);
+            Check(multi && many.Count == 2 && many[0].From == "SLZ" && many[1].To == "FOR", "Detectar automaticamente o exemplo SLZ–BSB–FOR.");
+            Check(many[0].Date == "12/11/2026" && many[1].Departure == "07:00" && many[1].Arrival == "09:35", "Preservar datas e horários do exemplo.");
+            string multiText = Quote.Format(many, 1, "R$ 2.450,00", Quote.Baggage(false), true);
+            Check(multiText.Contains("TRECHO 1") && multiText.Contains("TRECHO 2") && !multiText.Contains("VOLTA") && multiText.Contains("(2 trechos)"), "Mensagem identifica múltiplos trechos e valor total.");
+            string three = openJaw + "\nLATAM 3025 20 Nov 07:00h 20 Nov 09:35h FOR REC";
+            many = Quote.Identify(Quote.Parse(three, 2026), false, out multi);
+            Check(multi && many.Count == 3 && many[2].To == "REC", "Não truncar terceiro trecho.");
+            var normal = Quote.Identify(Quote.Parse(outbound + "AZUL 6052 17 Set 20:50h 17 Set 21:50h GRU SDU", 2026), false, out multi);
+            Check(!multi && normal.Count == 2, "Preservar ida e volta automática no mesmo dia.");
+            normal = Quote.Identify(Quote.Parse(outbound + "AZUL 6052 17 Set 20:50h 17 Set 21:50h GRU SDU", 2026), true, out multi);
+            Check(multi && normal.Count == 2, "Respeitar escolha explícita de múltiplos trechos.");
+            bool badMulti = false;
+            try { Quote.Identify(Quote.Parse(outbound + "AZUL 6052 17 Set 07:00h 17 Set 08:00h GRU SDU", 2026), false, out multi); }
+            catch (QuoteReadException) { badMulti = true; }
+            Check(badMulti, "Alternativa múltipla não esconde horários inconsistentes.");
+            var shortDates = new[] { "SLZ", "BSB", "12/11/26", "12/11/26", "04:35", "07:05", "LATAM", "Voo direto" };
+            Check(QuoteValidation.ReadFlight(shortDates).Date == "12/11/2026", "Normalizar ano curto para a cotação.");
+            shortDates[2] = shortDates[3] = "29/02/24";
+            Check(QuoteValidation.ReadFlight(shortDates).Date == "29/02/2024", "Aceitar ano bissexto curto.");
+            shortDates[2] = "29/02/26";
+            Reject(() => QuoteValidation.ReadFlight(shortDates), "Rejeitar data impossível após máscara.");
+            Check(EntryMask.Format("121126", true) == "12/11/26", "Máscara de data.");
+            Check(EntryMask.Format("0435", false) == "04:35", "Máscara de hora com zero inicial.");
+            Check(EntryMask.Format("12/11/2026", true) == "12/11/2026", "Preservar colagem de ano completo.");
             Console.WriteLine("PASS: " + assertions + " verificações.");
             return 0;
         }

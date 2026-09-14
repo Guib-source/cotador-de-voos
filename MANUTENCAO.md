@@ -1,4 +1,4 @@
-﻿# Cotador de voos — manutenção da versão 3.9
+# Cotador de voos — manutenção da versão 3.10
 
 Esta versão reorganiza o código da 3.2, preservando a interface e o formato da cotação. O projeto usa C# compatível com o compilador do .NET Framework 4.x do Windows e não requer pacotes externos.
 
@@ -124,7 +124,7 @@ Ao adicionar um novo layout, inclua o texto reconhecido e um resultado esperado 
 
 Manter o padrão de entregas numeradas: a versão 3.5 consolida as alterações
 posteriores à entrega 3.4. A cada nova entrega, incrementar a versão (próxima:
-3.10), atualizar MainForm.Layout.cs, AssemblyInfo.cs, LEIA-ME.txt, este documento
+3.11), atualizar MainForm.Layout.cs, AssemblyInfo.cs, LEIA-ME.txt, este documento
 e VERSOES.md. Executar os testes antes das alterações e novamente após compilar.
 
 Distribuir um ZIP completo Cotador-de-Voos-Windows-vX.Y.zip na pasta releases,
@@ -196,3 +196,20 @@ Colagens negativas, letras e mais de 15 dígitos significativos são rejeitadas
 sem truncar o valor. Limpar todos os caracteres mantém o campo vazio.
 Test-Visual.ps1 inclui 15 verificações de entrada monetária: 50 no total.
 A suíte de cotações mantém 1.228 verificações.
+
+## Múltiplos trechos e máscaras — 3.10
+Quote.Identify preserva Group no modo padrão. Quando o agrupamento não é
+possível, mantém cada segmento em uma linha e ativa o modo múltiplo. A
+validação prévia impede que a alternativa esconda aeroportos incompletos
+ou horários invertidos entre voos na mesma cidade. Não inventa traslados.
+No modo múltiplo explícito, cada voo permanece separado, inclusive conexões.
+MainForm.Itinerary.cs gerencia quantidade de linhas e conexões da linha atual.
+A troca para ida/volta não descarta linhas extras: primeiro é preciso removê-las.
+Quote.Format mantém o contrato antigo e oferece sobrecarga com modo múltiplo.
+EntryMask associa/desassocia eventos do editor reutilizado pela tabela.
+Datas curtas usam 2000–2099 explicitamente; datas completas continuam aceitas
+(inclusive 2100 do seletor). A célula exibe ano curto entre 2000 e 2099;
+a cotação mantém dd/MM/yyyy. A máscara não substitui validação de datas/horas.
+O OCR real do print SLZ–BSB / BSB–FOR reconheceu LATAM e os horários corretos;
+a reprodução textual integra Regression.cs. Testes atuais: 1.241 de cotação,
+62 de interface. Imagens de conferência nos dois tamanhos em visual-output.

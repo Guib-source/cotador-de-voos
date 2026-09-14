@@ -46,7 +46,7 @@ public partial class MainForm : Form
             List<Flight> flights = null;
             try
             {
-                flights = Quote.Group(Quote.Parse(raw.Text, selectedYear));
+                flights = IdentifyPrint(raw.Text, selectedYear);
             }
             catch (QuoteReadException)
             {
@@ -59,18 +59,14 @@ public partial class MainForm : Form
                 // A segunda falha é exibida ao usuário para preenchimento manual.
                 status.Text = "Reprocessando caracteres pequenos com outra ampliação…";
                 raw.Text = await ReadPrint(path, 2);
-                flights = Quote.Group(Quote.Parse(raw.Text, selectedYear));
+                flights = IdentifyPrint(raw.Text, selectedYear);
             }
 
-            for (int i = 0; i < Math.Min(flights.Count, 2); i++)
-            {
-                var flight = flights[i];
-                grid.Rows[i].SetValues(flight.From, flight.To, flight.Date, flight.ArrivalDate, flight.Departure, flight.Arrival, flight.Airline, flight.Connection);
-            }
+            PopulateFlights(flights);
 
             bool airportChange = flights.Count == 2 &&
                 (flights[0].To != flights[1].From || flights[0].From != flights[1].To);
-            status.Text = airportChange
+            status.Text = multipleMode.Checked ? "Múltiplos trechos preenchidos: cada linha corresponde a um voo do print. Confira todos os dados." : airportChange
                 ? "Ida e volta com troca de aeroporto. Confira os IATA, a companhia, o ano e a bagagem; informe o valor."
                 : "Trechos identificados. Confira os voos, a companhia, o ano e a bagagem; informe o valor.";
         }
@@ -107,8 +103,9 @@ public partial class MainForm : Form
             throw new ArgumentException("Preencha pelo menos a ida.");
         if (string.IsNullOrWhiteSpace(Convert.ToString(grid.Rows[0].Cells[0].Value)))
             throw new ArgumentException("Preencha a primeira linha com a ida.");
-        if (flights.Count == 2 && DateTime.ParseExact(flights[1].Date, QuoteValidation.DateFormat, CultureInfo.InvariantCulture) < DateTime.ParseExact(flights[0].Date, QuoteValidation.DateFormat, CultureInfo.InvariantCulture))
+        if (!multipleMode.Checked && flights.Count == 2 && DateTime.ParseExact(flights[1].Date, QuoteValidation.DateFormat, CultureInfo.InvariantCulture) < DateTime.ParseExact(flights[0].Date, QuoteValidation.DateFormat, CultureInfo.InvariantCulture))
             throw new ArgumentException("A volta não pode ocorrer antes da ida.");
+        if (multipleMode.Checked) Quote.MultipleSegments(flights);
         return flights;
     }
 
@@ -121,7 +118,7 @@ public partial class MainForm : Form
                 throw new ArgumentException("Confira os dados com o print e marque a confirmação antes de copiar.");
             List<Flight> flights = ReadReviewedFlights();
             decimal amount = QuoteValidation.ReadAmount(price.Text);
-            output.Text = Quote.Format(flights, (int)passengers.Value, amount.ToString("C", QuoteValidation.BrazilianCulture), Quote.Baggage(baggage.Checked));
+            output.Text = Quote.Format(flights, (int)passengers.Value, amount.ToString("C", QuoteValidation.BrazilianCulture), Quote.Baggage(baggage.Checked), multipleMode.Checked);
             Clipboard.SetText(output.Text);
             status.Text = "Cotação copiada! Cole no WhatsApp ou no canal de atendimento.";
         }
@@ -140,6 +137,7 @@ public partial class MainForm : Form
             preview.Image = null;
         }
 
+        if (disposing && entryMask != null) entryMask.Dispose();
         base.Dispose(disposing);
     }
 }

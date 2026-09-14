@@ -7,6 +7,13 @@ public static class QuoteValidation
 {
     public const string DateFormat = "dd/MM/yyyy";
     public static readonly CultureInfo BrazilianCulture = new CultureInfo("pt-BR");
+    public static bool TryReadDate(string text, out DateTime date)
+    {
+        // Dois dígitos representam explicitamente 2000–2099, independente do Windows.
+        if (text.Length == 8 && text[2] == '/' && text[5] == '/')
+            text = text.Substring(0, 6) + "20" + text.Substring(6);
+        return DateTime.TryParseExact(text, DateFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out date);
+    }
     // A ordem corresponde às colunas da tabela, incluindo a coluna oculta de conexões.
     public static Flight ReadFlight(string[] values)
     {
@@ -18,8 +25,8 @@ public static class QuoteValidation
             throw new ArgumentException("Preencha todos os campos do trecho. Para somente ida, deixe toda a linha VOLTA vazia.");
         DateTime departureDate, arrivalDate;
         TimeSpan departureTime, arrivalTime;
-        if (!DateTime.TryParseExact(values[2], DateFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out departureDate) || !DateTime.TryParseExact(values[3], DateFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out arrivalDate))
-            throw new ArgumentException("Use datas válidas no formato dd/MM/aaaa.");
+        if (!TryReadDate(values[2], out departureDate) || !TryReadDate(values[3], out arrivalDate))
+            throw new ArgumentException("Use datas válidas no formato dd/MM/aa.");
         if (!TimeSpan.TryParseExact(values[4], @"hh\:mm", CultureInfo.InvariantCulture, out departureTime) || !TimeSpan.TryParseExact(values[5], @"hh\:mm", CultureInfo.InvariantCulture, out arrivalTime))
             throw new ArgumentException("Use horários válidos no formato HH:mm.");
         if (arrivalDate < departureDate)
@@ -30,8 +37,8 @@ public static class QuoteValidation
         {
             From = values[0],
             To = values[1],
-            Date = values[2],
-            ArrivalDate = values[3],
+            Date = departureDate.ToString(DateFormat),
+            ArrivalDate = arrivalDate.ToString(DateFormat),
             Departure = values[4],
             Arrival = values[5],
             Airline = values[6],

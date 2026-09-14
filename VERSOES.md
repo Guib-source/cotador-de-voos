@@ -1,5 +1,16 @@
 # Histórico de versões — Cotador de Voos
 
+## 3.10 — 14/09/2026
+
+- Modo de múltiplos trechos, com seleção automática para rotas abertas e
+  preenchimento de todos os voos do print, sem limite de duas linhas.
+- Botões para adicionar e remover trechos e editor de conexões por linha.
+- Datas e horários com separadores automáticos durante a digitação.
+- Mensagem com trechos numerados e valor total; ida e volta preservada.
+- Print SLZ–BSB / BSB–FOR conferido com OCR local na escala 3.
+- 1.241 verificações de cotação e 62 de interface aprovadas.
+- Pacote: `releases/Cotador-de-Voos-Windows-v3.10.zip`.
+
 ## 3.9 — 11/09/2026
 
 - Campo de valor com máscara monetária brasileira durante a digitação.

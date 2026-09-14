@@ -5,6 +5,32 @@ using System.Linq;
 
 public static partial class Quote
 {
+    // No modo múltiplo cada linha do print permanece um voo, sem inferir conexões.
+    public static List<Flight> MultipleSegments(List<Flight> segments)
+    {
+        if (segments.Count == 0 || segments.Any(f => string.IsNullOrWhiteSpace(f.From) || string.IsNullOrWhiteSpace(f.To) || f.From == f.To))
+            throw new QuoteReadException("Revise os aeroportos: nenhum trecho pode estar incompleto ou ter origem igual ao destino.");
+        for (int i = 0; i < segments.Count; i++)
+        {
+            var current = segments[i];
+            if (GetLocalDateTime(current, true).Date < GetLocalDateTime(current, false).Date)
+                throw new QuoteReadException("A data de chegada é anterior à saída.");
+            if (i > 0 && SameJourneyCity(segments[i - 1].To, current.From) &&
+                GetLocalDateTime(current, false) < GetLocalDateTime(segments[i - 1], true))
+                throw new QuoteReadException("O próximo voo sai antes da chegada do anterior. Revise datas e horários.");
+        }
+        return segments.Select(f => CombineSegments(new List<Flight> { f })).ToList();
+    }
+
+    public static List<Flight> Identify(List<Flight> segments, bool forceMultiple, out bool multiple)
+    {
+        var separate = MultipleSegments(segments); // Valida também antes da alternativa automática.
+        multiple = forceMultiple;
+        if (forceMultiple) return separate;
+        try { return Group(segments); }
+        catch (QuoteReadException) { multiple = true; return separate; }
+    }
+
     private const double MinimumStayHours = 18;
     private const double MinimumGapSeparationHours = 6;
     private const double LongStopHours = 24;
