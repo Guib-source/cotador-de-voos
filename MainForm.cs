@@ -46,10 +46,14 @@ public partial class MainForm : Form
             status.Text = "Lendo o print no seu computador…";
             int selectedYear = (int)year.Value;
             raw.Text = await ReadPrint(path, 3);
+            string firstReading = raw.Text;
             List<Flight> flights = null;
             try
             {
-                flights = IdentifyPrint(raw.Text, selectedYear);
+                if (multipleMode.Checked)
+                    flights = IdentifyPrint(firstReading, selectedYear);
+                else
+                    flights = Quote.Group(Quote.Parse(firstReading, selectedYear));
             }
             catch (QuoteReadException)
             {
@@ -61,8 +65,11 @@ public partial class MainForm : Form
                 // Releia a imagem: não atribua um horário arbitrário a um token ilegível.
                 // A segunda falha é exibida ao usuário para preenchimento manual.
                 status.Text = "Reprocessando caracteres pequenos com outra ampliação…";
-                raw.Text = await ReadPrint(path, 2);
-                flights = IdentifyPrint(raw.Text, selectedYear);
+                string secondReading = await ReadPrint(path, 2);
+                bool multiple, useSecond;
+                flights = Quote.IdentifyAfterRetry(firstReading, secondReading, selectedYear, multipleMode.Checked, out multiple, out useSecond);
+                multipleMode.Checked = multiple;
+                raw.Text = useSecond ? secondReading : firstReading;
             }
 
             PopulateFlights(flights);

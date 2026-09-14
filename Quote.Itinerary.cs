@@ -28,7 +28,49 @@ public static partial class Quote
         multiple = forceMultiple;
         if (forceMultiple) return separate;
         try { return Group(segments); }
-        catch (QuoteReadException) { multiple = true; return separate; }
+        catch (QuoteReadException)
+        {
+            // Uma conexão curta com IATA divergente costuma ser erro do OCR
+            // (ex.: SUZ/SLZ), não uma nova cidade de um roteiro múltiplo.
+            for (int i = 1; i < segments.Count; i++)
+                if (segments[i - 1].To != segments[i].From &&
+                    (GetLocalDateTime(segments[i], false) - GetLocalDateTime(segments[i - 1], true)).TotalHours < MinimumStayHours)
+                    throw new QuoteReadException("Aeroportos divergentes em conexão curta. Confira os IATA ou selecione Múltiplos trechos manualmente.");
+            if (segments.Count > 2 && segments.Last().To == segments.First().From)
+                throw new QuoteReadException("A divisão entre ida e volta está ambígua. Confira as datas e os aeroportos.");
+            multiple = true;
+            return separate;
+        }
+    }
+
+    // Chamada somente quando a primeira leitura não pôde ser agrupada.
+    // A leitura com outra ampliação tem prioridade sobre a inferência de
+    // múltiplos trechos, que não deve esconder um IATA errado no primeiro OCR.
+    public static List<Flight> IdentifyAfterRetry(string firstText, string secondText, int year, bool forceMultiple, out bool multiple, out bool useSecond)
+    {
+        if (!forceMultiple)
+        {
+            try
+            {
+                var grouped = Group(Parse(secondText, year));
+                multiple = false;
+                useSecond = true;
+                return grouped;
+            }
+            catch (QuoteReadException) { }
+        }
+        try
+        {
+            var second = Identify(Parse(secondText, year), forceMultiple, out multiple);
+            useSecond = true;
+            return second;
+        }
+        catch (QuoteReadException)
+        {
+            var first = Identify(Parse(firstText, year), forceMultiple, out multiple);
+            useSecond = false;
+            return first;
+        }
     }
 
     private const double MinimumStayHours = 18;

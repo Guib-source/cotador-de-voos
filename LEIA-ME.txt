@@ -1,6 +1,9 @@
-﻿COTADOR DE VOOS — 4.0.0-beta.1 (EM AVALIAÇÃO)
+﻿COTADOR DE VOOS — 4.0.0-beta.2 (EM AVALIAÇÃO)
 
 MUDANÇAS
+Segunda leitura do OCR antes de definir múltiplos trechos automaticamente.
+Ida e volta com conexões voltam a ser agrupadas quando a primeira leitura
+confunde um aeroporto, como SUZ em lugar de SLZ.
 Busca de aeroportos por cidade, IATA ou nome, inclusive sem acentos.
 Alertas nos campos incompletos, datas/horários inválidos e códigos fora do catálogo.
 Explicação das correções de IATA feitas pelo OCR, inclusive em conexões.
@@ -8,7 +11,7 @@ Versão centralizada e compilações de avaliação separadas da versão estáve
 Preparação de pacotes locais sem sobrescrever entregas anteriores.
 
 COMO ABRIR
-Na pasta deste projeto, a beta fica em bin/4.0.0-beta.1/Cotador.exe.
+Na pasta deste projeto, a beta fica em bin/4.0.0-beta.2/Cotador.exe.
 Se recebeu o ZIP da beta, extraia-o e abra Cotador.exe na pasta Cotador.
 Mantenha Ocr.ps1 ao lado do executável. A versão estável 3.10 continua separada.
 Requer Windows 10/11, .NET Framework 4.x e idioma de OCR instalado.

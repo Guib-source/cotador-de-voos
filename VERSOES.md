@@ -1,5 +1,13 @@
 # Histórico de versões — Cotador de Voos
 
+## 4.0.0-beta.2 — em desenvolvimento
+
+- Tenta a segunda ampliação do OCR antes de decidir por múltiplos trechos.
+- Recupera a ida e volta FOR–LIS / LIS–FOR do print com conexões em Recife,
+  São Paulo e São Luís, mesmo quando a primeira leitura traz SUZ.
+- Uma conexão curta com aeroportos divergentes passa a exigir revisão;
+  a escolha manual de múltiplos trechos continua disponível.
+
 ## 4.0.0-beta.1 — em desenvolvimento
 
 - Busca de aeroportos por cidade, IATA e nome, aceitando termos sem acentos.

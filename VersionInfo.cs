@@ -2,5 +2,5 @@
 public static class VersionInfo
 {
     public const string Assembly = "4.0.0.0";
-    public const string Display = "4.0.0-beta.1";
+    public const string Display = "4.0.0-beta.2";
 }

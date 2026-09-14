@@ -2,14 +2,14 @@
 
 - `main`: código da última entrega estável. A entrega atual continua sendo 3.10.
 - `codex/preparacao-v4.0`: desenvolvimento e avaliação da futura versão 4.0.
-- `4.0.0-beta.1`: primeira compilação de avaliação. Não é a release estável 4.0.
+- `4.0.0-beta.1`: primeira compilação de avaliação; `4.0.0-beta.2`: correção de leitura de ida e volta. Nenhuma é a release estável 4.0.
 
 ## Identidade da compilação
 
 `VersionInfo.cs` é a fonte da versão usada pela janela, pelos metadados do
 executável e pelos scripts. `Assembly` contém a versão numérica do Windows;
 `Display` contém a versão completa, incluindo o sufixo de avaliação.
-Para uma nova entrega de testes, incremente `beta.1` para `beta.2` e assim
+Para uma nova entrega de testes, incremente `beta.2` para `beta.3` e assim
 por diante. Para a entrega estável planejada, use `4.0.0` sem sufixo.
 
 `Build.ps1` grava em `bin/<versão>/`, junto com `Ocr.ps1`. Assim é possível

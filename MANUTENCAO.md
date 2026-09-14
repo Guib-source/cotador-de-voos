@@ -1,4 +1,4 @@
-# Cotador de voos — manutenção da versão 4.0.0-beta.1
+# Cotador de voos — manutenção da versão 4.0.0-beta.2
 
 Esta versão reorganiza o código da 3.2, preservando a interface e o formato da cotação. O projeto usa C# compatível com o compilador do .NET Framework 4.x do Windows e não requer pacotes externos.
 
@@ -240,3 +240,21 @@ cidades e os IATA existentes. Os nomes dos aeroportos mantêm o idioma da fonte.
 SHA256 do CSV consultado:
 47880571C7F3129667CC22E5A3FD0EC10F12883B405CA2B3CE40994847610529.
 O arquivo de origem não é necessário durante o uso: o catálogo é offline.
+
+## Segunda leitura antes de múltiplos trechos — beta.2
+
+No print de 14/09/2026, a primeira leitura (escala 3) produziu SUZ na chegada
+do voo GRU–SLZ de 27/12. A saída do voo seguinte foi lida como SLZ, após
+apenas 1h05, quebrando a continuidade. Quote.Identify antes aceitava todas
+as linhas como múltiplos trechos; assim MainForm não chegava à segunda escala.
+A leitura na escala 2 reconhece SLZ em ambas as linhas e Quote.Group divide
+corretamente a rota em FOR–LIS e LIS–FOR, com três voos em cada sentido.
+
+MainForm agora tenta Quote.Group na primeira leitura quando o modo múltiplo
+não foi escolhido expressamente. Em caso de falha, obtém a segunda leitura e
+prioriza o agrupamento dela. Somente depois considera o modo múltiplo. Uma
+descontinuidade com pausa inferior a 18 horas não ativa o modo múltiplo
+automaticamente; o usuário ainda pode escolhê-lo manualmente. Quando as duas
+escalas falham, o texto escolhido para revisão acompanha a leitura utilizada.
+As saídas reais das duas escalas estão em tests/roundtrip-scale3.txt e
+tests/roundtrip-scale2.txt, e a regressão verifica a rota e as conexões.

@@ -1,3 +1,4 @@
+- Prioridade à segunda leitura do print antes de classificar uma rota como múltiplos trechos; conexão curta com IATA divergente exige revisão.
 - Busca de aeroportos por cidade, código IATA ou nome, com suporte a termos sem acentos.
 - Seleção de aeroportos na revisão de origem e destino pelo botão Buscar aeroporto ou atalho F3.
 - Destaque de campos incompletos, datas e horários inválidos e códigos fora do catálogo.

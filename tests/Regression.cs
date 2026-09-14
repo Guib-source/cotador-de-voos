@@ -202,6 +202,26 @@ internal static class Regression
             warnings = FlightReview.Inspect(reviewValues, corrected.Notices);
             Check(warnings.ContainsKey(1) && warnings.ContainsKey(2) && warnings.ContainsKey(4), "Sinalizar IATA desconhecido, data e horário inválidos.");
             Check(FlightReview.Inspect(Enumerable.Repeat("", 8).ToArray(), corrected.Notices).Count == 0, "Não alertar na volta totalmente vazia.");
+            string scale3 = File.ReadAllText(Path.Combine(Path.GetDirectoryName(args[0]), "roundtrip-scale3.txt"));
+            string scale2 = File.ReadAllText(Path.Combine(Path.GetDirectoryName(args[0]), "roundtrip-scale2.txt"));
+            var firstPass = Quote.Parse(scale3, 2026);
+            var secondPass = Quote.Parse(scale2, 2026);
+            Check(firstPass.Count == 6 && firstPass[4].To == "SUZ", "Reproduzir a troca SLZ/SUZ na primeira leitura do print real.");
+            Check(secondPass.Count == 6 && secondPass[4].To == "SLZ", "Confirmar SLZ na segunda leitura do print real.");
+            bool rejectedFirst = false;
+            try { Quote.Identify(firstPass, false, out multi); }
+            catch (QuoteReadException) { rejectedFirst = true; }
+            Check(rejectedFirst, "Conexão SUZ/SLZ curta não deve virar múltiplos trechos automaticamente.");
+            bool usedSecond;
+            var correctTrip = Quote.IdentifyAfterRetry(scale3, scale2, 2026, false, out multi, out usedSecond);
+            Check(usedSecond && !multi && correctTrip.Count == 2 && correctTrip[0].From == "FOR" && correctTrip[0].To == "LIS" && correctTrip[1].From == "LIS" && correctTrip[1].To == "FOR", "A segunda leitura restaura ida e volta FOR–LIS–FOR.");
+            Check(correctTrip[0].Connection.Contains("Recife") && correctTrip[1].Connection.Contains("São Luís"), "Preservar as conexões nos dois sentidos.");
+            var separatedByChoice = Quote.IdentifyAfterRetry(scale3, scale2, 2026, true, out multi, out usedSecond);
+            Check(multi && separatedByChoice.Count == 6, "A escolha explícita de múltiplos trechos continua disponível.");
+            bool rejectedBoth = false;
+            try { Quote.IdentifyAfterRetry(scale3, scale3, 2026, false, out multi, out usedSecond); }
+            catch (QuoteReadException) { rejectedBoth = true; }
+            Check(rejectedBoth, "Duas leituras com o mesmo IATA inconsistente exigem revisão manual.");
             Console.WriteLine("PASS: " + assertions + " verificações.");
             return 0;
         }
