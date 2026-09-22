@@ -34,7 +34,7 @@ Depois de avaliar as mudanças no branch, revisar o diff e autorizar a entrega:
 
 1. Atualizar a versão para `4.0.0` e finalizar `RELEASE-NOTES.md`.
 2. Compilar, executar os testes e conferir visualmente os fluxos alterados.
-3. Integrar o branch em `main`, criar a tag `v4.0.0` e enviar ao GitHub privado.
+3. Integrar o branch em `main`, criar a tag `v4.0.0` e enviar ao GitHub público.
 4. Preparar o pacote estável e publicar a release vinculada à tag.
 
 As descrições de releases e os novos registros em `VERSOES.md` devem listar
