@@ -1,4 +1,4 @@
-# Cotador de voos — manutenção da versão 4.0.0-beta.2
+# Cotador de voos — manutenção da versão 4.0.0
 
 Esta versão reorganiza o código da 3.2, preservando a interface e o formato da cotação. O projeto usa C# compatível com o compilador do .NET Framework 4.x do Windows e não requer pacotes externos.
 
@@ -122,12 +122,12 @@ Ao adicionar um novo layout, inclua o texto reconhecido e um resultado esperado 
 
 ## Versionamento das entregas
 
-A próxima versão estável planejada é 4.0.0. Trabalhar no branch
-codex/preparacao-v4.0 e manter main na entrega estável durante a avaliação.
+A versão estável 4.0.0 consolida o desenvolvimento do branch
+codex/preparacao-v4.0. Manter main nas entregas estáveis.
 VersionInfo.cs centraliza a identidade da versão. Build.ps1 grava em
 bin/<versão>/; os testes usam essa mesma pasta. Package.ps1 prepara apenas
 um ZIP local após build e testes, recusando sobrescrever entregas.
-Consultar VERSIONAMENTO.md antes de preparar novas betas ou a release.
+Consultar VERSIONAMENTO.md antes de preparar novas versões.
 As novas descrições de versão incluem somente mudanças, sem contagem de
 verificações. RELEASE-NOTES.md contém o texto da futura entrega.
 Distribuir um ZIP completo Cotador-de-Voos-Windows-vX.Y.zip na pasta releases,

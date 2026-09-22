@@ -5,21 +5,20 @@ permite revisar o itinerário e gera uma cotação para copiar ao atendimento.
 
 ![Ícone do Cotador](assets/Cotador.png)
 
-**Estável: 3.10 · Em desenvolvimento: 4.0.0-beta.2.** [Histórico de versões](VERSOES.md).
+**Versão atual: 4.0.0.** [Histórico de versões](VERSOES.md).
 
-## Avaliar as melhorias da 4.0
+## Novidades da versão 4.0
 
-As mudanças estão no branch `codex/preparacao-v4.0`. A beta inclui busca por
-cidade, IATA ou nome do aeroporto e alertas explicados nos campos da revisão.
+A versão 4.0 inclui busca por cidade, IATA ou nome do aeroporto e alertas
+explicados nos campos da revisão.
 Selecione Origem ou Destino e clique em **Buscar aeroporto**, ou pressione F3.
 Campos amarelos indicam dados para conferir; selecione o campo para ver o motivo.
 A leitura do print tenta outra ampliação antes de classificar uma rota como
 múltiplos trechos, preservando a ida e volta quando o OCR inicial erra um IATA.
 
-Compile com `Build.ps1` e abra `bin/4.0.0-beta.2/Cotador.exe`.
-O executável estável da raiz é preservado. Para preparar um ZIP local,
-execute `Package.ps1`. A release 4.0 será publicada posteriormente.
-[Fluxo de versionamento](VERSIONAMENTO.md) · [Mudanças previstas](RELEASE-NOTES.md).
+Para instalar, baixe o [ZIP da versão 4.0](https://github.com/Guib-source/cotador-de-voos/releases/tag/v4.0.0).
+Para recompilar, execute `Build.ps1` e abra `bin/4.0.0/Cotador.exe`.
+[Fluxo de versionamento](VERSIONAMENTO.md) · [Mudanças da versão](RELEASE-NOTES.md).
 
 ## Usar o programa
 

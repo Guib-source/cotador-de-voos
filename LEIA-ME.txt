@@ -1,4 +1,4 @@
-﻿COTADOR DE VOOS — 4.0.0-beta.2 (EM AVALIAÇÃO)
+﻿COTADOR DE VOOS — VERSÃO 4.0.0
 
 MUDANÇAS
 Segunda leitura do OCR antes de definir múltiplos trechos automaticamente.
@@ -11,9 +11,8 @@ Versão centralizada e compilações de avaliação separadas da versão estáve
 Preparação de pacotes locais sem sobrescrever entregas anteriores.
 
 COMO ABRIR
-Na pasta deste projeto, a beta fica em bin/4.0.0-beta.2/Cotador.exe.
-Se recebeu o ZIP da beta, extraia-o e abra Cotador.exe na pasta Cotador.
-Mantenha Ocr.ps1 ao lado do executável. A versão estável 3.10 continua separada.
+Baixe o ZIP da versão 4.0.0, extraia-o e abra Cotador.exe na pasta Cotador.
+Mantenha Ocr.ps1 ao lado do executável.
 Requer Windows 10/11, .NET Framework 4.x e idioma de OCR instalado.
 
 COMO USAR
@@ -37,6 +36,6 @@ O OCR é local. O programa não consulta preços nem envia mensagens ao cliente.
 Os alertas ajudam na revisão, mas não garantem que o reconhecimento esteja correto.
 
 DESENVOLVIMENTO
-Branch: codex/preparacao-v4.0. A release estável 4.0 será preparada posteriormente.
+Versão 4.0.0 construída a partir do branch codex/preparacao-v4.0.
 Build.ps1 compila em bin/<versão>. Package.ps1 prepara um ZIP local.
 Consulte VERSIONAMENTO.md e MANUTENCAO.md. Histórico em VERSOES.md.
